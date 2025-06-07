@@ -20,6 +20,7 @@ export const ProductProvider = ({ children }) => {
         fetchProducts();
     }, []);
 
+
     // اضافه کردن محصول
     const addProduct = async (product) => {
         try {
@@ -54,8 +55,34 @@ export const ProductProvider = ({ children }) => {
         }
     };
 
+    // ویرایش محصول
+    const editProduct = async (id, updatedProduct) => {
+        try {
+            const res = await fetch(`/api/product/${id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(updatedProduct),
+            });
+            if (res.ok) {
+                const editedProduct = await res.json();
+                setProducts(prev => prev.map(p =>
+                    p.id === id ? editedProduct : p
+                ));
+            } else {
+                alert('Failed to edit product');
+            }
+        } catch (err) {
+            alert('Error connecting to server');
+        }
+    };
+
     return (
-        <ProductContext.Provider value={{ products, addProduct, deleteProduct }}>
+        <ProductContext.Provider value={{
+            products,
+            editProduct,
+            addProduct,
+            deleteProduct
+        }}>
             {children}
         </ProductContext.Provider>
     );

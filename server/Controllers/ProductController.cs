@@ -59,7 +59,7 @@ public async Task<IActionResult> UpdateProduct(int id, Product updatedProduct)
 
     await _context.SaveChangesAsync();
 
-    return NoContent();
+    return Ok(product);
 }
 
 // DELETE: api/product/{id}
